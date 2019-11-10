@@ -180,15 +180,18 @@ void MainWindow::finish_and_save_clicked()
 
 void MainWindow::body_part_clicked()
 {
-    auto body_part = dynamic_cast<QPushButton*>(sender());
+    auto button = dynamic_cast<QPushButton*>(sender());
 
-    if (body_part)
+    if (button)
     {
         ListImage * result = nullptr;
-        SelectionDialog dialog{ result, bodyPartFromName(body_part->objectName()) };
+        SelectionDialog dialog{ result, bodyPartFromName(button->objectName()) };
 
-        dialog.exec();
+        auto success = dialog.exec();
 
-        std::cout << result << std::endl;
+        if (success && result)
+        {
+            std::cout << "limb was selected" << std::endl;
+        }
     }
 }

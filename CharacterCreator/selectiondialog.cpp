@@ -39,6 +39,7 @@ SelectionDialog::SelectionDialog(ListImage*& r, BodyParts part)
     ui->setupUi(this);
     ui->selectWidget->setup(part);
     result = nullptr;
+    connect(ui->selectWidget, &SelectWidget::selectionMade, this, &SelectionDialog::on_selection_made);
 }
 
 
@@ -48,9 +49,16 @@ SelectionDialog::~SelectionDialog()
 }
 
 
+void SelectionDialog::on_selection_made(ListImage* image)
+{
+    result = image;
+}
+
+
 void SelectionDialog::on_newButton_pressed()
 {
     QPixmap pixels{ 1024, 1024 };
+    pixels.fill(QColor(255, 255, 255, 0));
     DrawingDialog drawing_dialog{ pixels, bodyPart };
     auto success = drawing_dialog.exec();
 
@@ -58,9 +66,10 @@ void SelectionDialog::on_newButton_pressed()
     {
         auto pathString = bodyPartsDirectory.path() + "/" + bodyPartName(bodyPart) + "/" + generateRandomId() + ".png";
         pixels.save(pathString);
-        ImageManager::get()->addItem(QDir(pathString), bodyPart, pixels);
+        result = ImageManager::get()->addItem(QDir(pathString), bodyPart, pixels);
+
         std::cout << "Drawing saved as: " << pathString.toStdString() << "\n";
-        close();
+        accept();
     }
     else
     {
@@ -71,16 +80,25 @@ void SelectionDialog::on_newButton_pressed()
 
 void SelectionDialog::on_editButton_pressed()
 {
-    QPixmap pixels{ 1024, 1024 };
-    DrawingDialog drawing_dialog{ pixels, bodyPart };
-    auto success = drawing_dialog.exec();
+    if (ui->selectWidget->getSelectedImage())
+    {
+        QPixmap pixels = ui->selectWidget->getSelectedImage()->image.copy();
+        DrawingDialog drawing_dialog{ pixels, bodyPart };
 
-    if (success)
-    {
-        close();
-    }
-    else
-    {
-        std::cout << "Editing canceled.\n";
+        auto success = drawing_dialog.exec();
+
+        if (success)
+        {
+            auto pathString = bodyPartsDirectory.path() + "/" + bodyPartName(bodyPart) + "/" + generateRandomId() + ".png";
+            pixels.save(pathString);
+            result = ImageManager::get()->addItem(QDir(pathString), bodyPart, pixels);
+
+            std::cout << "Drawing saved as: " << pathString.toStdString() << "\n";
+            accept();
+        }
+        else
+        {
+            std::cout << "Drawing canceled.\n";
+        }
     }
 }

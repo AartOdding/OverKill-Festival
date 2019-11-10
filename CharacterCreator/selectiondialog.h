@@ -22,6 +22,8 @@ public:
 
 private slots:
 
+    void on_selection_made(ListImage* image);
+
     void on_newButton_pressed();
 
     void on_editButton_pressed();

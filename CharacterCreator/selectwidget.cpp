@@ -19,6 +19,19 @@ void SelectWidget::setup(BodyParts part)
 }
 
 
+ListImage * SelectWidget::getSelectedImage() const
+{
+    if (selectedImage == -1)
+    {
+        return nullptr;
+    }
+    else
+    {
+        return images->at(selectedImage).get();
+    }
+}
+
+
 void SelectWidget::resizeEvent(QResizeEvent *)
 {
     setHeight();
@@ -48,7 +61,7 @@ void SelectWidget::mousePressEvent(QMouseEvent *event)
     if (index < images->size())
     {
         selectedImage = index;
-        emit selectionMade(&images->at(index));
+        emit selectionMade(images->at(index).get());
         repaint();
     }
 }
@@ -81,7 +94,7 @@ void SelectWidget::paintEvent(QPaintEvent *)
         QRectF target = QRectF(x * (imageSize + 10) + 10, y * (imageSize + 10) + 10, imageSize, imageSize);
         QRectF source = QRectF(255, 255, 512, 512);
 
-        painter.drawPixmap(target, images->at(i).image, source);
+        painter.drawPixmap(target, images->at(i)->image, source);
         painter.drawRoundedRect(target, 4, 4);
     }
 }

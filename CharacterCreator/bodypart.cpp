@@ -10,7 +10,6 @@ BodyPart::BodyPart(QPixmap& pix, BodyParts part_, DrawingDialog * drawer)
     : pixels(pix), bodyPart(part_), drawingDialog(drawer)
 {
     bg.fill();
-    pixels.fill(QColor(255, 255, 255, 0));
     setPos(-512, -512);
 }
 

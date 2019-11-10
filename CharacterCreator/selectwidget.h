@@ -1,6 +1,6 @@
 #pragma once
 
-
+#include <list>
 #include <QWidget>
 
 #include "bodypart.h"
@@ -16,6 +16,8 @@ public:
     explicit SelectWidget(QWidget *parent = nullptr);
 
     void setup(BodyParts bodyPart);
+
+    ListImage * getSelectedImage() const;
 
 signals:
 
@@ -43,6 +45,6 @@ private:
 
     BodyParts bodyPart;
 
-    std::vector<ListImage> * images;
+    std::vector<std::unique_ptr<ListImage>> * images;
 
 };

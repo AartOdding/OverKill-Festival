@@ -1,6 +1,6 @@
 #pragma once
 
-#include <vector>
+#include <list>
 #include <memory>
 #include <unordered_map>
 
@@ -28,18 +28,18 @@ public:
     static ImageManager * get();
 
 
-    std::vector<ListImage> * getList(BodyParts bodyPart);
+    std::vector<std::unique_ptr<ListImage>> * getList(BodyParts bodyPart);
 
 
     // will load the data from memory
-    void addItem(const QDir& directory, BodyParts bodyPart, const QPixmap& pixels);
+    ListImage * addItem(const QDir& directory, BodyParts bodyPart, const QPixmap& pixels);
 
     // will load the data from disk.
-    void addItem(const QDir& directory, BodyParts bodyPart);
+    ListImage * addItem(const QDir& directory, BodyParts bodyPart);
 
 
 private:
 
-    std::unordered_map<BodyParts, std::vector<ListImage>> imageLists;
+    std::unordered_map<BodyParts, std::vector<std::unique_ptr<ListImage>> > imageLists;
 
 };
