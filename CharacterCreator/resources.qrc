@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>icons/color-wheel.png</file>
+        <file>icons/drag.png</file>
+        <file>icons/eraser.png</file>
+        <file>icons/mirroring.png</file>
+        <file>icons/pen.png</file>
+        <file>icons/zoom-in.png</file>
+        <file>icons/zoom-out.png</file>
+        <file>icons/crayon.png</file>
+    </qresource>
+    <qresource prefix="/"/>
+</RCC>
