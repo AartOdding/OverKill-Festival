@@ -6,7 +6,8 @@
 #include <QMainWindow>
 
 #include "ui_mainwindow.h"
-
+#include "bodypart.h"
+#include "imagemanager.h"
 
 
 extern QDir workingDirectory;
@@ -35,8 +36,18 @@ public slots:
 
     void finish_and_save_clicked();
 
+    void randomize_clicked();
+
+    void reset_clicked();
+
+signals:
+
+    void bodyPartSelected(BodyParts bodyPart, ListImage* image);
 
 private:
+
+    QPalette defaultPalette;
+    QPalette selectedPalette;
 
     std::unique_ptr<Ui::MainWindow> ui;
 

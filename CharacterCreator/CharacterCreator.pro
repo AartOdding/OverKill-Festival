@@ -30,6 +30,7 @@ SOURCES += \
         imagemanager.cpp \
         main.cpp \
         mainwindow.cpp \
+        previewwidget.cpp \
         selectiondialog.cpp \
         selectwidget.cpp
 
@@ -38,6 +39,7 @@ HEADERS += \
     drawingdialog.h \
     imagemanager.h \
     mainwindow.h \ \
+    previewwidget.h \
     selectiondialog.h \
     selectwidget.h
 

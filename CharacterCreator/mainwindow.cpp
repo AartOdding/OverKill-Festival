@@ -26,6 +26,15 @@ MainWindow::MainWindow()
 {
     ui = std::make_unique<Ui::MainWindow>();
     ui->setupUi(this);
+
+    defaultPalette = ui->chest->palette();
+    selectedPalette = defaultPalette;
+    selectedPalette.setColor(QPalette::Button, QColor(150, 255, 150, 150));
+
+    connect(this, &MainWindow::bodyPartSelected, ui->previewWidget, &PreviewWidget::onBodyPartSelected);
+    connect(ui->resetButton, &QPushButton::clicked, this, &MainWindow::reset_clicked);
+    connect(ui->randomizeButton, &QPushButton::clicked, this, &MainWindow::randomize_clicked);
+
     QTimer::singleShot(500, std::bind(&MainWindow::select_working_directory, this));
 /*
     ui->observer_view->setScene(scene);
@@ -103,7 +112,7 @@ void MainWindow::select_working_directory()
 
         if (directory.exists() && directory_info.isReadable() && directory_info.isWritable())
         {
-            std::cout << "Changed output directory to: " << directory.path().toStdString() << "\n";
+            std::cout << "Changed working directory to: " << directory.path().toStdString() << "\n";
             workingDirectory = directory;
 
             load_working_directory();
@@ -147,7 +156,7 @@ void MainWindow::load_working_directory()
         {
             auto path = subDirectory.path() + "/" + entry;
             ImageManager::get()->addItem(QDir(path), bodyPartFromName(name));
-            std::cout << path.toStdString() << "\n";
+            //std::cout << path.toStdString() << "\n";
         }
     }
 }
@@ -181,17 +190,44 @@ void MainWindow::finish_and_save_clicked()
 void MainWindow::body_part_clicked()
 {
     auto button = dynamic_cast<QPushButton*>(sender());
+    auto bodyPart = bodyPartFromName(button->objectName());
 
     if (button)
     {
         ListImage * result = nullptr;
-        SelectionDialog dialog{ result, bodyPartFromName(button->objectName()) };
+        SelectionDialog dialog{ result, bodyPart };
 
         auto success = dialog.exec();
 
         if (success && result)
         {
-            std::cout << "limb was selected" << std::endl;
+            button->setPalette(selectedPalette);
+            emit bodyPartSelected(bodyPart, result);
         }
     }
+}
+
+
+void MainWindow::randomize_clicked()
+{
+    std::cout << "Randomize" << std::endl;
+}
+
+
+void MainWindow::reset_clicked()
+{
+    ui->previewWidget->reset();
+
+    ui->head->setPalette(defaultPalette);
+    ui->chest->setPalette(defaultPalette);
+    ui->arm_left->setPalette(defaultPalette);
+    ui->arm_right->setPalette(defaultPalette);
+    ui->forearm_left->setPalette(defaultPalette);
+    ui->forearm_right->setPalette(defaultPalette);
+    ui->hand_left->setPalette(defaultPalette);
+    ui->hand_right->setPalette(defaultPalette);
+    ui->thigh_left->setPalette(defaultPalette);
+    ui->thigh_right->setPalette(defaultPalette);
+    ui->shin_left->setPalette(defaultPalette);
+    ui->shin_right->setPalette(defaultPalette);
 }
