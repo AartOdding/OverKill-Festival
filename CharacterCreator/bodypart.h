@@ -5,6 +5,8 @@
 #include <QPixmap>
 #include <QPainter>
 #include <QGraphicsItem>
+#include <QRandomGenerator>
+
 
 class DrawingDialog;
 
@@ -53,6 +55,23 @@ inline BodyParts bodyPartFromName(const QString& name)
 {
     auto pos = std::distance(bodyPartNames.begin(), std::find(bodyPartNames.begin(), bodyPartNames.end(), name));
     return static_cast<BodyParts>(pos);
+}
+
+
+
+inline QString generateRandomId()
+{
+    const QString possibleCharacters("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789");
+    const int randomStringLength = 16; // assuming you want random strings of 12 characters
+
+    QString randomString;
+    for(int i=0; i<randomStringLength; ++i)
+    {
+        int index = QRandomGenerator::global()->bounded(0, possibleCharacters.size() - 1);
+        QChar nextChar = possibleCharacters.at(index);
+        randomString.append(nextChar);
+    }
+    return randomString;
 }
 
 

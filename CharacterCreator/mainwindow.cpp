@@ -15,7 +15,7 @@
 #include <iostream>
 
 #include "imagemanager.h"
-
+#include "previewwidget.h"
 
 
 QDir workingDirectory;
@@ -34,69 +34,11 @@ MainWindow::MainWindow()
     connect(this, &MainWindow::bodyPartSelected, ui->previewWidget, &PreviewWidget::onBodyPartSelected);
     connect(ui->resetButton, &QPushButton::clicked, this, &MainWindow::reset_clicked);
     connect(ui->randomizeButton, &QPushButton::clicked, this, &MainWindow::randomize_clicked);
+    connect(ui->saveButton, &QPushButton::clicked, ui->previewWidget, &PreviewWidget::save);
+    connect(ui->previewWidget, &PreviewWidget::resetRequest, this, &MainWindow::reset_clicked);
 
     QTimer::singleShot(500, std::bind(&MainWindow::select_working_directory, this));
-/*
-    ui->observer_view->setScene(scene);
-    ui->observer_view->setInteractive(false);
-    ui->observer_view->scale(0.3, 0.3);
-    ui->observer_view->setAlignment(Qt::AlignCenter);
-    ui->observer_view->setDragMode(QGraphicsView::ScrollHandDrag);
-*/
-    /*
-    limbs["head"] = new Limb("head");
-    limbs["chest"] = new Limb("chest");
-    limbs["arm_left"] = new Limb("arm_left");
-    limbs["arm_right"] = new Limb("arm_right");
-    limbs["forearm_left"] = new Limb("forearm_left");
-    limbs["forearm_right"] = new Limb("forearm_right");
-    limbs["hand_left"] = new Limb("hand_left");
-    limbs["hand_right"] = new Limb("hand_right");
-    limbs["thigh_left"] = new Limb("thigh_left");
-    limbs["thigh_right"] = new Limb("thigh_right");
-    limbs["shin_left"] = new Limb("shin_left");
-    limbs["shin_right"] = new Limb("shin_right");
-
-    for (auto& [k, v] : limbs)
-    {
-        //scene->addItem(v);
-    }
-*/
-    /*
-    // Chest stays in place
-    limbs["head"]->setY(-300);
-
-    limbs["arm_left"]->setPos(160, -160);
-    limbs["arm_right"]->setPos(-160, -160);
-    limbs["forearm_left"]->setPos(320, -160);
-    limbs["forearm_right"]->setPos(-320, -160);
-
-    limbs["hand_left"]->setPos(420, -160);
-    limbs["hand_right"]->setPos(-420, -160);
-
-    limbs["thigh_left"]->setPos(60, 270);
-    limbs["thigh_right"]->setPos(-60, 270);
-
-    limbs["shin_left"]->setPos(60, 460);
-    limbs["shin_right"]->setPos(-60, 460);
-
-    //selected_tool = ui->draw_tool;
-    selected_body_part = ui->chest;
-
-    color = QColor(0, 0, 0);
-    mirroring = false;
-    //pen_width = ui->pen_width->value();
-    tool = Tool::Pen;
-    */
-    //scene->setSceneRect(scene->sceneRect().marginsAdded({10, 10, 10, 10}));
 }
-
-
-MainWindow::~MainWindow()
-{
-    //delete ui;
-}
-
 
 
 void MainWindow::select_working_directory()
@@ -162,31 +104,6 @@ void MainWindow::load_working_directory()
 }
 
 
-void MainWindow::finish_and_save_clicked()
-{
-    auto author = ui->field_author->text().simplified().replace( " ", "" );
-    auto character = ui->field_name->text().simplified().replace( " ", "" );
-    auto folder = author + "-" + character;
-
-    if (workingDirectory.mkdir(folder))
-    {
-        if (author.size() > 0 && character.size() > 0)
-        {
-            auto dir = workingDirectory;
-            dir.cd(folder);
-            std::cout << "saved at: " << dir.absolutePath().toStdString() << "\n";
-
-
-            return;
-        }
-    }
-
-    QMessageBox msg;
-    msg.setText("Please fill in you and your character's names!");
-    msg.exec();
-}
-
-
 void MainWindow::body_part_clicked()
 {
     auto button = dynamic_cast<QPushButton*>(sender());
@@ -210,7 +127,22 @@ void MainWindow::body_part_clicked()
 
 void MainWindow::randomize_clicked()
 {
-    std::cout << "Randomize" << std::endl;
+    auto pvw = ui->previewWidget;
+
+    pvw->randomize();
+
+    ui->head->setPalette(pvw->contains(BodyParts::Head) ? selectedPalette : defaultPalette);
+    ui->chest->setPalette(pvw->contains(BodyParts::Chest) ? selectedPalette : defaultPalette);
+    ui->arm_left->setPalette(pvw->contains(BodyParts::ArmLeft) ? selectedPalette : defaultPalette);
+    ui->arm_right->setPalette(pvw->contains(BodyParts::ArmRight) ? selectedPalette : defaultPalette);
+    ui->forearm_left->setPalette(pvw->contains(BodyParts::ForeArmLeft) ? selectedPalette : defaultPalette);
+    ui->forearm_right->setPalette(pvw->contains(BodyParts::ForeArmRight) ? selectedPalette : defaultPalette);
+    ui->hand_left->setPalette(pvw->contains(BodyParts::HandLeft) ? selectedPalette : defaultPalette);
+    ui->hand_right->setPalette(pvw->contains(BodyParts::HandRight) ? selectedPalette : defaultPalette);
+    ui->thigh_left->setPalette(pvw->contains(BodyParts::ThighLeft) ? selectedPalette : defaultPalette);
+    ui->thigh_right->setPalette(pvw->contains(BodyParts::ThighRight) ? selectedPalette : defaultPalette);
+    ui->shin_left->setPalette(pvw->contains(BodyParts::ShinLeft) ? selectedPalette : defaultPalette);
+    ui->shin_right->setPalette(pvw->contains(BodyParts::ShinRight) ? selectedPalette : defaultPalette);
 }
 
 

@@ -1,6 +1,8 @@
 #include "previewwidget.h"
+#include "mainwindow.h"
 
 #include <iostream>
+#include <QXmlStreamWriter>
 
 
 PreviewWidget::PreviewWidget(QWidget *parent)
@@ -12,8 +14,12 @@ PreviewWidget::PreviewWidget(QWidget *parent)
 
 void PreviewWidget::onBodyPartSelected(BodyParts bodyPart, ListImage* image)
 {
-    character[bodyPart] = image;
-    repaint();
+    if (!contains(bodyPart) || character[bodyPart] != image)
+    {
+        character[bodyPart] = image;
+        repaint();
+        changed = true;
+    }
 }
 
 
@@ -59,11 +65,76 @@ void PreviewWidget::draw(BodyParts bodyPart, int transX, int transY, float rotat
 
 void PreviewWidget::reset()
 {
-    character.clear();
-    repaint();
+    if (!character.empty())
+    {
+        character.clear();
+        repaint();
+        changed = false; // cannot save empty character.
+    }
 }
+
+
+void PreviewWidget::save()
+{
+    if (changed)
+    {
+        changed = false;
+
+        QString output;
+        QString id = generateRandomId();
+        QXmlStreamWriter xml{ &output };
+
+        xml.setAutoFormatting(true);
+        xml.writeStartDocument();
+        xml.writeStartElement("character");
+        xml.writeAttribute("id", id);
+
+        // easier to hardcode, so we always have the same order.
+        if (contains(BodyParts::Head))         xml.writeTextElement("head",          path(BodyParts::Head));
+        if (contains(BodyParts::Chest))        xml.writeTextElement("chest",         path(BodyParts::Chest));
+        if (contains(BodyParts::ArmLeft))      xml.writeTextElement("arm_left",      path(BodyParts::ArmLeft));
+        if (contains(BodyParts::ArmRight))     xml.writeTextElement("arm_right",     path(BodyParts::ArmRight));
+        if (contains(BodyParts::ForeArmLeft))  xml.writeTextElement("forearm_left",  path(BodyParts::ForeArmLeft));
+        if (contains(BodyParts::ForeArmRight)) xml.writeTextElement("forearm_right", path(BodyParts::ForeArmRight));
+        if (contains(BodyParts::HandLeft))     xml.writeTextElement("hand_left",     path(BodyParts::HandLeft));
+        if (contains(BodyParts::HandRight))    xml.writeTextElement("hand_right",    path(BodyParts::HandRight));
+        if (contains(BodyParts::ThighLeft))    xml.writeTextElement("thigh_left",    path(BodyParts::ThighLeft));
+        if (contains(BodyParts::ThighRight))   xml.writeTextElement("thigh_right",   path(BodyParts::ThighRight));
+        if (contains(BodyParts::ShinLeft))     xml.writeTextElement("shin_left",     path(BodyParts::ShinLeft));
+        if (contains(BodyParts::ShinRight))    xml.writeTextElement("shin_right",    path(BodyParts::ShinRight));
+
+        xml.writeEndElement();
+        xml.writeEndDocument();
+
+        std::cout << output.toStdString() << std::endl;
+
+        emit resetRequest();
+    }
+}
+
+
+QString PreviewWidget::path(BodyParts bodyPart) const
+{
+    return workingDirectory.relativeFilePath(character.at(bodyPart)->directory.path());
+}
+
 
 void PreviewWidget::randomize()
 {
+    for (const auto& name : bodyPartNames)
+    {
+        auto bodyPart = bodyPartFromName(name);
+        auto choices = ImageManager::get()->getList(bodyPart);
 
+        if (choices->size() == 1)
+        {
+            onBodyPartSelected(bodyPart, choices->at(0).get());
+        }
+        else if (!choices->empty())
+        {
+            int randomIndex = QRandomGenerator::global()->bounded(0, choices->size());
+            onBodyPartSelected(bodyPart, choices->at(randomIndex).get());
+        }
+
+    }
 }

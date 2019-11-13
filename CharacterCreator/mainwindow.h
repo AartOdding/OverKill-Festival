@@ -22,8 +22,6 @@ public:
 
     MainWindow();
 
-    ~MainWindow();
-
 
 public slots:
 
@@ -33,8 +31,6 @@ public slots:
 
 
     void body_part_clicked();
-
-    void finish_and_save_clicked();
 
     void randomize_clicked();
 

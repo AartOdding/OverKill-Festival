@@ -22,6 +22,10 @@ public:
 
     void paintEvent(QPaintEvent *event) override;
 
+signals:
+
+    void resetRequest();
+
 public slots:
 
     void onBodyPartSelected(BodyParts bodyPart, ListImage* image);
@@ -29,6 +33,10 @@ public slots:
     void reset();
 
     void randomize();
+
+    void save();
+
+    QString path(BodyParts bodyPart) const;
 
 private:
 
@@ -38,6 +46,7 @@ private:
 
 
     QPainter painter{ this };
+    bool changed = false;
 
 };
 

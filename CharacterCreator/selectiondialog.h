@@ -17,8 +17,6 @@ public:
 
     ~SelectionDialog();
 
-    static QString generateRandomId();
-
 
 private slots:
 
