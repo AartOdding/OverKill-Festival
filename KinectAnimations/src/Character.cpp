@@ -4,7 +4,8 @@
 
 
 
-Character::Character(const std::string& name)
+Character::Character(const std::string& name_)
+	: name(name_)
 {
 	body_parts[static_cast<int>(BodyPart::ARM_LEFT)]      = ofImage(name + "/arm_left.png");
 	body_parts[static_cast<int>(BodyPart::ARM_RIGHT)]     = ofImage(name + "/arm_right.png");

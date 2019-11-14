@@ -34,7 +34,7 @@ void ofApp::setup()
 
 	ofImage test{ "https://en.wikipedia.org/wiki/Battle_of_France#/media/File:Battle_of_France_collage.jpg" };
 
-	ofSetFrameRate(30);
+	ofSetFrameRate(60);
 
 	background = std::make_unique<ofImage>("background0.jpg");
 	characters.push_back(std::make_unique<Character>("player1"));
@@ -63,6 +63,7 @@ void ofApp::exit()
 
 void ofApp::receive(const std::string& message)
 {
+	std::cout << message << "\n";
 	auto parts = ofSplitString(message, " ");
 
 	if (!parts.empty())
@@ -87,7 +88,6 @@ void ofApp::receive(const std::string& message)
 			isRecording = false;
 		}
 	}
-	std::cout << message << "\n";
 }
 
 
@@ -156,7 +156,7 @@ void ofApp::draw()
 
 	if (isRecording)
 	{
-		img.grabScreen(0, 0, ofGetWidth(), ofGetHeight());
+		//img.grabScreen(0, 0, ofGetWidth(), ofGetHeight());
 		//img.save("screenshot.png");
 
 		ofSetColor(255, 0, 0);

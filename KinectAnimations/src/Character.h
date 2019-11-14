@@ -34,6 +34,8 @@ public:
 
 	void draw(BodyPart body_part, glm::vec2 position, float rotation) const;
 
+	const std::string name;
+
 private:
 
 	std::array<ofImage, 12> body_parts;
