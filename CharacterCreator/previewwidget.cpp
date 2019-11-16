@@ -80,9 +80,11 @@ void PreviewWidget::save()
     {
         changed = false;
 
-        QString output;
         QString id = generateRandomId();
-        QXmlStreamWriter xml{ &output };
+        QFile file{ characterDirectory.path() + "/" + id + ".xml" };
+        file.open(QFile::WriteOnly);
+
+        QXmlStreamWriter xml{ &file };
 
         xml.setAutoFormatting(true);
         xml.writeStartDocument();
@@ -106,7 +108,12 @@ void PreviewWidget::save()
         xml.writeEndElement();
         xml.writeEndDocument();
 
-        std::cout << output.toStdString() << std::endl;
+        file.close();
+        //std::cout << output.toStdString() << std::endl;
+
+        QPixmap pixmap(this->size());
+        this->render(&pixmap);
+        pixmap.save(characterDirectory.path() + "/" + id + ".png");
 
         emit resetRequest();
     }

@@ -37,9 +37,16 @@ public:
     // will load the data from disk.
     ListImage * addItem(const QDir& directory, BodyParts bodyPart);
 
+    void loadTemplates(const QDir& directory);
+
+    const QPixmap * getTemplate(BodyParts bodyPart) const;
 
 private:
 
     std::unordered_map<BodyParts, std::vector<std::unique_ptr<ListImage>> > imageLists;
+
+    std::unordered_map<BodyParts, QPixmap> bodyPartTemplates;
+
+    QPixmap noTemplate{ 1024, 1024 };
 
 };

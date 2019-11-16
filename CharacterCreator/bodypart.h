@@ -98,7 +98,6 @@ protected:
 
 private:
 
-    QPixmap bg{ 1024, 1024 };
     QPixmap& pixels;
 
     QPainter painter;

@@ -1,5 +1,6 @@
 #include "imagemanager.h"
 #include <QImageReader>
+#include <iostream>
 
 
 
@@ -48,4 +49,34 @@ ListImage * ImageManager::addItem(const QDir& directory, BodyParts bodyPart)
     imageLists[bodyPart].back().directory = directory;
     imageLists[bodyPart].back().image = QPixmap::fromImageReader(&imgReader);
     return &imageLists[bodyPart].back();*/
+}
+
+
+
+void ImageManager::loadTemplates(const QDir& directory)
+{
+    noTemplate.fill();
+    auto dir = directory;
+    dir.setNameFilters({"*.png"});
+    auto imgs = dir.entryList();
+
+    for (auto img : imgs)
+    {
+        std::cout << img.chopped(4).toStdString() << "\n";
+        QImageReader imgReader{ dir.path() + "/" + img };
+        bodyPartTemplates[bodyPartFromName(img.chopped(4))] = QPixmap::fromImageReader(&imgReader);
+    }
+}
+
+
+const QPixmap * ImageManager::getTemplate(BodyParts bodyPart) const
+{
+    if (bodyPartTemplates.find(bodyPart) != bodyPartTemplates.end())
+    {
+        return &bodyPartTemplates.at(bodyPart);
+    }
+    else
+    {
+        return &noTemplate;
+    }
 }

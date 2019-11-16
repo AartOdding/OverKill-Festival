@@ -20,6 +20,8 @@
 
 QDir workingDirectory;
 QDir bodyPartsDirectory;
+QDir characterDirectory;
+QDir templateDirectory;
 
 
 MainWindow::MainWindow()
@@ -54,10 +56,7 @@ void MainWindow::select_working_directory()
 
         if (directory.exists() && directory_info.isReadable() && directory_info.isWritable())
         {
-            std::cout << "Changed working directory to: " << directory.path().toStdString() << "\n";
-            workingDirectory = directory;
-
-            load_working_directory();
+            load_working_directory(directory);
             return;
         }
 
@@ -69,21 +68,42 @@ void MainWindow::select_working_directory()
 
 
 
-void MainWindow::load_working_directory()
+void MainWindow::load_working_directory(const QDir& directory)
 {
-    auto directory = workingDirectory;
+    workingDirectory = directory;
+    bodyPartsDirectory = directory;
+    characterDirectory = directory;
+    templateDirectory = directory;
 
-    if (!directory.cd("body_parts"))
+    if (!bodyPartsDirectory.cd("body_parts"))
     {
-        directory.mkdir("body_parts");
-        directory.cd("body_parts");
+        bodyPartsDirectory.mkdir("body_parts");
+        bodyPartsDirectory.cd("body_parts");
     }
 
-    bodyPartsDirectory = directory;
+    if (!characterDirectory.cd("Characters"))
+    {
+        characterDirectory.mkdir("Characters");
+        characterDirectory.cd("Characters");
+    }
+
+    if (!templateDirectory.cd("drawing_templates"))
+    {
+        characterDirectory.mkdir("drawing_templates");
+        characterDirectory.cd("drawing_templates");
+    }
+
+    if (!templateDirectory.cd("template"))
+    {
+        characterDirectory.mkdir("template");
+        characterDirectory.cd("template");
+    }
+
+    ImageManager::get()->loadTemplates(templateDirectory);
 
     for (const auto& name : bodyPartNames)
     {
-        auto subDirectory = directory;
+        auto subDirectory = bodyPartsDirectory;
 
         if (!subDirectory.cd(name))
         {
@@ -98,7 +118,6 @@ void MainWindow::load_working_directory()
         {
             auto path = subDirectory.path() + "/" + entry;
             ImageManager::get()->addItem(QDir(path), bodyPartFromName(name));
-            //std::cout << path.toStdString() << "\n";
         }
     }
 }

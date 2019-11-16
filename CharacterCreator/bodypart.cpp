@@ -1,5 +1,6 @@
 #include "bodypart.h"
 #include "drawingdialog.h"
+#include "imagemanager.h"
 
 #include <QPainter>
 #include <QGraphicsSceneMouseEvent>
@@ -9,7 +10,6 @@
 BodyPart::BodyPart(QPixmap& pix, BodyParts part_, DrawingDialog * drawer)
     : pixels(pix), bodyPart(part_), drawingDialog(drawer)
 {
-    bg.fill();
     setPos(-512, -512);
 }
 
@@ -28,7 +28,7 @@ void Limb::save_to(const QDir &directory)
 
 void BodyPart::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
-    painter->drawPixmap(0, 0, 1024, 1024, bg);
+    painter->drawPixmap(0, 0, 1024, 1024, *ImageManager::get()->getTemplate(bodyPart));
     painter->drawPixmap(0, 0, 1024, 1024, pixels);
 }
 

@@ -12,6 +12,8 @@
 
 extern QDir workingDirectory;
 extern QDir bodyPartsDirectory;
+extern QDir characterDirectory;
+extern QDir templateDirectory;
 
 
 class MainWindow : public QMainWindow
@@ -27,7 +29,7 @@ public slots:
 
     void select_working_directory();
 
-    void load_working_directory();
+    void load_working_directory(const QDir& directory);
 
 
     void body_part_clicked();
