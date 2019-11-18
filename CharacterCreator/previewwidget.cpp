@@ -34,17 +34,17 @@ void PreviewWidget::paintEvent(QPaintEvent *event)
     painter.begin(this);
 
     if (contains(BodyParts::Chest))        draw(BodyParts::Chest,         0,    0);
-    if (contains(BodyParts::Head))         draw(BodyParts::Head,          0,   -300);
-    if (contains(BodyParts::ArmLeft))      draw(BodyParts::ArmLeft,       160, -160);
-    if (contains(BodyParts::ArmRight))     draw(BodyParts::ArmRight,     -160, -160);
-    if (contains(BodyParts::ForeArmLeft))  draw(BodyParts::ForeArmLeft,   320, -160);
-    if (contains(BodyParts::ForeArmRight)) draw(BodyParts::ForeArmRight, -320, -160);
-    if (contains(BodyParts::HandLeft))     draw(BodyParts::HandLeft,      420, -160);
-    if (contains(BodyParts::HandRight))    draw(BodyParts::HandRight,    -420, -160);
-    if (contains(BodyParts::ThighLeft))    draw(BodyParts::ThighLeft,     60,   270);
-    if (contains(BodyParts::ThighRight))   draw(BodyParts::ThighRight,   -60,   270);
-    if (contains(BodyParts::ShinLeft))     draw(BodyParts::ShinLeft,      60,   460);
-    if (contains(BodyParts::ShinRight))    draw(BodyParts::ShinRight,    -60,   460);
+    if (contains(BodyParts::Head))         draw(BodyParts::Head,          0,   -230);
+    if (contains(BodyParts::ArmLeft))      draw(BodyParts::ArmLeft,       160, -110);
+    if (contains(BodyParts::ArmRight))     draw(BodyParts::ArmRight,     -160, -110);
+    if (contains(BodyParts::ForeArmLeft))  draw(BodyParts::ForeArmLeft,   320, -110);
+    if (contains(BodyParts::ForeArmRight)) draw(BodyParts::ForeArmRight, -320, -110);
+    if (contains(BodyParts::HandLeft))     draw(BodyParts::HandLeft,      420, -110);
+    if (contains(BodyParts::HandRight))    draw(BodyParts::HandRight,    -420, -110);
+    if (contains(BodyParts::ThighLeft))    draw(BodyParts::ThighLeft,     50,   270);
+    if (contains(BodyParts::ThighRight))   draw(BodyParts::ThighRight,   -50,   270);
+    if (contains(BodyParts::ShinLeft))     draw(BodyParts::ShinLeft,      50,   460);
+    if (contains(BodyParts::ShinRight))    draw(BodyParts::ShinRight,    -50,   460);
 
     painter.end();
 }
