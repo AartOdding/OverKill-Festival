@@ -81,7 +81,26 @@ void PreviewWidget::save()
         changed = false;
 
         QString id = generateRandomId();
-        QFile file{ characterDirectory.path() + "/" + id + ".xml" };
+
+        QDir newDir = characterDirectory;
+        newDir.mkdir(id);
+        newDir.cd(id);
+
+        if (contains(BodyParts::Head)) character[BodyParts::Head]->image.save(newDir.path() + "/head.png");
+        if (contains(BodyParts::Chest)) character[BodyParts::Chest]->image.save(newDir.path() + "/chest.png");
+        if (contains(BodyParts::ArmLeft)) character[BodyParts::ArmLeft]->image.save(newDir.path() + "/arm_left.png");
+        if (contains(BodyParts::ArmRight)) character[BodyParts::ArmRight]->image.save(newDir.path() + "/arm_right.png");
+        if (contains(BodyParts::ForeArmLeft)) character[BodyParts::ForeArmLeft]->image.save(newDir.path() + "/forearm_left.png");
+        if (contains(BodyParts::ForeArmRight)) character[BodyParts::ForeArmRight]->image.save(newDir.path() + "/forearm_right.png");
+        if (contains(BodyParts::HandLeft)) character[BodyParts::HandLeft]->image.save(newDir.path() + "/hand_left.png");
+        if (contains(BodyParts::HandRight)) character[BodyParts::HandRight]->image.save(newDir.path() + "/hand_right.png");
+        if (contains(BodyParts::ThighLeft)) character[BodyParts::ThighLeft]->image.save(newDir.path() + "/thigh_left.png");
+        if (contains(BodyParts::ThighRight)) character[BodyParts::ThighRight]->image.save(newDir.path() + "/thigh_right.png");
+        if (contains(BodyParts::ShinLeft)) character[BodyParts::ShinLeft]->image.save(newDir.path() + "/shin_left.png");
+        if (contains(BodyParts::ShinRight)) character[BodyParts::ShinRight]->image.save(newDir.path() + "/shin_right.png");
+
+        //QFile file{ characterDirectory.path() + "/" + id + ".xml" };
+        /*
         file.open(QFile::WriteOnly);
 
         QXmlStreamWriter xml{ &file };
@@ -110,6 +129,7 @@ void PreviewWidget::save()
 
         file.close();
         //std::cout << output.toStdString() << std::endl;
+        */
 
         QPixmap pixmap(this->size());
         this->render(&pixmap);
