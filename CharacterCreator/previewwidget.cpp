@@ -8,7 +8,9 @@
 PreviewWidget::PreviewWidget(QWidget *parent)
     : QWidget(parent)
 {
-
+    // background: transparent;
+    // setStyleSheet("background-color: rgba( 255, 255, 255, 0% );" );
+    setStyleSheet("background: transparent;");
 }
 
 
@@ -132,6 +134,7 @@ void PreviewWidget::save()
         */
 
         QPixmap pixmap(this->size());
+        pixmap.fill(Qt::transparent);
         this->render(&pixmap);
         pixmap.save(characterDirectory.path() + "/" + id + ".png");
 
